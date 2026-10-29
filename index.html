@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi Akidah Akhlak Kelas 7 - Penjelajah Rukun Islam</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins & Arabic Style Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        arabic: ['Amiri', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #0f766e 100%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .pattern-bg {
+            background-color: #047857;
+            background-image: radial-gradient(#10b981 1px, transparent 1px), radial-gradient(#10b981 1px, #047857 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            opacity: 0.9;
+        }
+        .card-flip {
+            perspective: 1000px;
+        }
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card-flip.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        .pulse-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col min-h-screen relative overflow-x-hidden">
+
+    <!-- Pattern Background -->
+    <div class="fixed inset-0 pattern-bg -z-10 opacity-20"></div>
+
+    <!-- Header Navigation -->
+    <header class="bg-emerald-900/90 backdrop-blur-md text-white border-b border-emerald-700/50 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('screen-main-menu')">
+                <div class="w-10 h-10 bg-amber-400 rounded-full flex items-center justify-center text-emerald-900 font-bold text-xl shadow-lg">
+                    <i class="fa-solid font-bold fa-mosque"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg leading-tight tracking-wide text-amber-300">PENJELAJAH RUKUN ISLAM</h1>
+                    <p class="text-xs text-emerald-200">Akidah Akhlak Kelas 7 SMP</p>
+                </div>
+            </div>
+
+            <!-- Header Controls -->
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <button id="sound-toggle" onclick="toggleSound()" class="bg-emerald-800 hover:bg-emerald-700 p-2.5 rounded-full text-amber-300 transition-all border border-emerald-600" title="Audio On/Off">
+                    <i id="sound-icon" class="fa-solid fa-volume-high text-lg"></i>
+                </button>
+                <button onclick="showScreen('screen-materi')" class="bg-emerald-700 hover:bg-emerald-600 px-3 py-1.5 rounded-lg text-sm font-semibold text-white flex items-center gap-2 border border-emerald-500 shadow-sm transition">
+                    <i class="fa-solid fa-book-open text-amber-300"></i>
+                    <span class="hidden sm:inline">Materi Belajar</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow flex items-center justify-center p-4 sm:p-6 max-w-5xl mx-auto w-full">
+
+        <!-- ================= 1. MENU UTAMA ================= -->
+        <section id="screen-main-menu" class="w-full glass-panel rounded-3xl p-6 sm:p-10 shadow-2xl text-center transition-all animate-fadeIn">
+            <div class="inline-block bg-emerald-100 text-emerald-800 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-4">
+                <i class="fa-solid fa-star text-amber-500 mr-1"></i> Media Pembelajaran Interaktif
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-emerald-900 mb-2">Mari Belajar & Bermain!</h2>
+            <p class="text-slate-600 max-w-lg mx-auto text-sm sm:text-base mb-8">
+                Uji pemahamanmu mengenai Rukun Islam, makna syahadat, tata cara shalat, zakat, puasa, dan ibadah haji.
+            </p>
+
+            <!-- Mode Games Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Game 1 Card -->
+                <div onclick="startGame(1)" class="group cursor-pointer bg-gradient-to-b from-white to-emerald-50 hover:to-emerald-100 border-2 border-emerald-200 hover:border-emerald-500 rounded-2xl p-6 text-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between">
+                    <div>
+                        <div class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform shadow-md">
+                            <i class="fa-solid fa-arrow-down-short-wide"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-emerald-900 mb-2">1. Susun Urutan</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">Urutkan 5 Rukun Islam sesuai urutan syariat yang benar dari nomor 1 hingga 5.</p>
+                    </div>
+                    <span class="inline-block bg-emerald-600 text-white text-xs font-semibold py-2 px-4 rounded-xl group-hover:bg-emerald-700 transition">Mainkan Sekarang &rarr;</span>
+                </div>
+
+                <!-- Game 2 Card -->
+                <div onclick="startGame(2)" class="group cursor-pointer bg-gradient-to-b from-white to-amber-50 hover:to-amber-100 border-2 border-amber-200 hover:border-amber-500 rounded-2xl p-6 text-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between">
+                    <div>
+                        <div class="w-16 h-16 bg-amber-500 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform shadow-md">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-emerald-900 mb-2">2. Kuis Pilihan Ganda</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">Jawab 10 pertanyaan Akidah Akhlak seputar Rukun Islam, syarat, dan hikmahnya.</p>
+                    </div>
+                    <span class="inline-block bg-amber-500 text-white text-xs font-semibold py-2 px-4 rounded-xl group-hover:bg-amber-600 transition">Mainkan Sekarang &rarr;</span>
+                </div>
+
+                <!-- Game 3 Card -->
+                <div onclick="startGame(3)" class="group cursor-pointer bg-gradient-to-b from-white to-teal-50 hover:to-teal-100 border-2 border-teal-200 hover:border-teal-500 rounded-2xl p-6 text-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between">
+                    <div>
+                        <div class="w-16 h-16 bg-teal-600 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform shadow-md">
+                            <i class="fa-solid fa-puzzle-piece"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-emerald-900 mb-2">3. Cocokkan Pasangan</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">Temukan pasangan kartu antara Rukun Islam dan definisi atau penjelasannya.</p>
+                    </div>
+                    <span class="inline-block bg-teal-600 text-white text-xs font-semibold py-2 px-4 rounded-xl group-hover:bg-teal-700 transition">Mainkan Sekarang &rarr;</span>
+                </div>
+            </div>
+
+            <!-- Bottom Action -->
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="showScreen('screen-materi')" class="bg-emerald-800 hover:bg-emerald-900 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-book-open-reader"></i> Baca Rangkuman Materi
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= 2. MATERI PEMBELAJARAN ================= -->
+        <section id="screen-materi" class="w-full glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl hidden">
+            <div class="flex justify-between items-center mb-6 border-b pb-4 border-slate-200">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-emerald-900 flex items-center gap-2">
+                        <i class="fa-solid fa-book-quran text-amber-500"></i> Rangkuman Materi Rukun Islam
+                    </h2>
+                    <p class="text-xs text-slate-500">Materi Pembelajaran Akidah Akhlak Kelas 7 SMP</p>
+                </div>
+                <button onclick="showScreen('screen-main-menu')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 p-2.5 rounded-full transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-6 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                <!-- Syahadat -->
+                <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 sm:p-5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                        <h3 class="font-bold text-lg text-emerald-900">Syahadat (Pengakuan Iman)</h3>
+                    </div>
+                    <p class="text-slate-700 text-sm leading-relaxed mb-3">
+                        Syahadatain terdiri dari dua kalimat persaksian: <strong>Syahadat Tauhid</strong> (mengakui tiada Tuhan selain Allah SWT) dan <strong>Syahadat Rasul</strong> (mengakui Nabi Muhammad SAW adalah utusan Allah).
+                    </p>
+                    <div class="bg-white p-3 rounded-xl text-center border border-emerald-100">
+                        <p class="font-arabic text-xl text-emerald-800 font-bold mb-1">أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا رَسُوْلُ اللهِ</p>
+                        <p class="text-xs text-slate-500 italic">"Saya bersaksi tiada Tuhan selain Allah, dan saya bersaksi Nabi Muhammad utusan Allah."</p>
+                    </div>
+                </div>
+
+                <!-- Shalat -->
+                <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 sm:p-5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                        <h3 class="font-bold text-lg text-emerald-900">Shalat 5 Waktu (Tiang Agama)</h3>
+                    </div>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Shalat adalah ibadah wajib berupa perkataan dan perbuatan yang dimulai dengan <em>Takbiratul Ihram</em> dan diakhiri dengan <em>Salam</em>. Hukumnya <strong>Fardhu 'Ain</strong> untuk setiap Muslim baligh dan berakal. Shalat mencegah dari perbuatan keji dan munkar.
+                    </p>
+                </div>
+
+                <!-- Zakat -->
+                <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 sm:p-5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                        <h3 class="font-bold text-lg text-emerald-900">Zakat (Pembersih Harta dan Jiwa)</h3>
+                    </div>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Mengeluarkan sebagian harta tertentu kepada orang yang berhak menerima (8 Ashnaf). Zakat terbagi dua:
+                    </p>
+                    <ul class="list-disc list-inside text-xs text-slate-600 mt-2 space-y-1">
+                        <li><strong>Zakat Fitrah:</strong> Zakat jiwa yang dikeluarkan pada bulan Ramadan berupa makanan pokok (2,5 kg/3,5 liter).</li>
+                        <li><strong>Zakat Maal:</strong> Zakat harta kekayaan (emas, tabungan, hasil tani) jika telah mencapai <em>nishab</em> dan <em>haul</em> (1 tahun).</li>
+                    </ul>
+                </div>
+
+                <!-- Puasa -->
+                <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 sm:p-5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-sm">4</span>
+                        <h3 class="font-bold text-lg text-emerald-900">Puasa Ramadan (Melatih Ketakwaan)</h3>
+                    </div>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Menahan diri dari makan, minum, dan hal-hal yang membatalkan puasa mulai dari terbit fajar (Subuh) hingga terbenam matahari (Maghrib) disertai niat. Tujuannya membentuk pribadi yang bertaqwa (QS. Al-Baqarah: 183).
+                    </p>
+                </div>
+
+                <!-- Haji -->
+                <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 sm:p-5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-sm">5</span>
+                        <h3 class="font-bold text-lg text-emerald-900">Haji (Bagi yang Mampu)</h3>
+                    </div>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Ibadah mengunjungi Baitullah (Ka'bah) di Makkah Al-Mukarramah pada bulan Dzulhijjah untuk melaksanakan amalan tertentu seperti Ihram, Wukuf di Arafah, Thawaf, dan Sa'i. Wajib bagi umat Islam yang mampu secara fisik, finansial, dan keamanan (<em>Istitha'ah</em>).
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <button onclick="showScreen('screen-main-menu')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg transition">
+                    Kembali ke Menu Utama
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= 3. GAME 1: DRAG & DROP / URUTAN ================= -->
+        <section id="game-1" class="w-full glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl hidden">
+            <!-- Game Top Bar -->
+            <div class="flex justify-between items-center mb-6 border-b pb-4 border-slate-200">
+                <div>
+                    <h2 class="text-xl font-bold text-emerald-900">Permainan 1: Susun Urutan Rukun Islam</h2>
+                    <p class="text-xs text-slate-500">Urutkan dengan benar dari Rukun Islam ke-1 hingga ke-5</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="bg-amber-100 text-amber-800 px-3 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-clock"></i> <span id="timer-g1">00:00</span>
+                    </div>
+                    <button onclick="exitGame()" class="text-slate-400 hover:text-rose-500 transition text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Instructions -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-800 mb-6 text-center">
+                <i class="fa-solid fa-circle-info mr-1"></i> Klik pilihan di sebelah kanan/bawah untuk memasukkannya ke kotak nomor urut yang sesuai!
+            </div>
+
+            <!-- Sorting Playground -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Target Slots -->
+                <div class="space-y-3">
+                    <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wider mb-2">Urutan Rukun Islam:</h3>
+                    
+                    <div class="target-slot bg-slate-100 border-2 border-dashed border-slate-300 rounded-xl p-3 flex items-center justify-between min-h-[54px] transition" data-index="1">
+                        <span class="w-8 h-8 bg-emerald-700 text-white font-bold rounded-lg flex items-center justify-center text-sm shadow">1</span>
+                        <div class="slot-content text-slate-400 font-medium text-sm flex-grow ml-3">Klik pilihan untuk mengisi #1</div>
+                        <button onclick="clearSlot(1)" class="clear-btn text-slate-300 hover:text-rose-500 text-sm hidden"><i class="fa-solid fa-circle-xmark"></i></button>
+                    </div>
+
+                    <div class="target-slot bg-slate-100 border-2 border-dashed border-slate-300 rounded-xl p-3 flex items-center justify-between min-h-[54px] transition" data-index="2">
+                        <span class="w-8 h-8 bg-emerald-700 text-white font-bold rounded-lg flex items-center justify-center text-sm shadow">2</span>
+                        <div class="slot-content text-slate-400 font-medium text-sm flex-grow ml-3">Klik pilihan untuk mengisi #2</div>
+                        <button onclick="clearSlot(2)" class="clear-btn text-slate-300 hover:text-rose-500 text-sm hidden"><i class="fa-solid fa-circle-xmark"></i></button>
+                    </div>
+
+                    <div class="target-slot bg-slate-100 border-2 border-dashed border-slate-300 rounded-xl p-3 flex items-center justify-between min-h-[54px] transition" data-index="3">
+                        <span class="w-8 h-8 bg-emerald-700 text-white font-bold rounded-lg flex items-center justify-center text-sm shadow">3</span>
+                        <div class="slot-content text-slate-400 font-medium text-sm flex-grow ml-3">Klik pilihan untuk mengisi #3</div>
+                        <button onclick="clearSlot(3)" class="clear-btn text-slate-300 hover:text-rose-500 text-sm hidden"><i class="fa-solid fa-circle-xmark"></i></button>
+                    </div>
+
+                    <div class="target-slot bg-slate-100 border-2 border-dashed border-slate-300 rounded-xl p-3 flex items-center justify-between min-h-[54px] transition" data-index="4">
+                        <span class="w-8 h-8 bg-emerald-700 text-white font-bold rounded-lg flex items-center justify-center text-sm shadow">4</span>
+                        <div class="slot-content text-slate-400 font-medium text-sm flex-grow ml-3">Klik pilihan untuk mengisi #4</div>
+                        <button onclick="clearSlot(4)" class="clear-btn text-slate-300 hover:text-rose-500 text-sm hidden"><i class="fa-solid fa-circle-xmark"></i></button>
+                    </div>
+
+                    <div class="target-slot bg-slate-100 border-2 border-dashed border-slate-300 rounded-xl p-3 flex items-center justify-between min-h-[54px] transition" data-index="5">
+                        <span class="w-8 h-8 bg-emerald-700 text-white font-bold rounded-lg flex items-center justify-center text-sm shadow">5</span>
+                        <div class="slot-content text-slate-400 font-medium text-sm flex-grow ml-3">Klik pilihan untuk mengisi #5</div>
+                        <button onclick="clearSlot(5)" class="clear-btn text-slate-300 hover:text-rose-500 text-sm hidden"><i class="fa-solid fa-circle-xmark"></i></button>
+                    </div>
+                </div>
+
+                <!-- Available Items Pool -->
+                <div>
+                    <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wider mb-2">Pilihan Acak:</h3>
+                    <div id="g1-options-container" class="space-y-3">
+                        <!-- Dynamic items generated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Actions -->
+            <div class="flex justify-between items-center border-t pt-4 border-slate-200">
+                <button onclick="resetGame1()" class="text-slate-500 hover:text-slate-700 text-sm font-semibold flex items-center gap-1">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+                <button onclick="checkGame1()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-check"></i> Periksa Jawaban
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= 4. GAME 2: KUIS PILIHAN GANDA ================= -->
+        <section id="game-2" class="w-full glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl hidden">
+            <!-- Game Header -->
+            <div class="flex justify-between items-center mb-6 border-b pb-4 border-slate-200">
+                <div>
+                    <span id="quiz-progress-text" class="text-xs font-bold text-amber-600 uppercase tracking-widest">Pertanyaan 1 dari 10</span>
+                    <h2 class="text-xl font-bold text-emerald-900">Kuis Akidah Akhlak</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-award text-amber-500"></i> Skor: <span id="quiz-score">0</span>
+                    </div>
+                    <button onclick="exitGame()" class="text-slate-400 hover:text-rose-500 transition text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-6 mb-6 shadow-inner">
+                <p id="quiz-question" class="text-slate-800 font-semibold text-base sm:text-lg leading-relaxed">
+                    <!-- Loaded dynamically -->
+                </p>
+            </div>
+
+            <!-- Options Grid -->
+            <div id="quiz-options-container" class="grid grid-cols-1 gap-3 mb-6">
+                <!-- Options buttons loaded dynamically -->
+            </div>
+
+            <!-- Explanation Feedback Box (Hidden initially) -->
+            <div id="quiz-feedback" class="hidden p-4 rounded-xl mb-6 border transition-all text-sm">
+                <div class="font-bold flex items-center gap-2 mb-1" id="feedback-title"></div>
+                <p id="feedback-text" class="text-slate-700"></p>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="flex justify-end border-t pt-4 border-slate-200">
+                <button id="quiz-next-btn" onclick="nextQuestion()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl font-bold shadow transition hidden flex items-center gap-2">
+                    Lanjut <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= 5. GAME 3: MATCH CARD ================= -->
+        <section id="game-3" class="w-full glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl hidden">
+            <div class="flex justify-between items-center mb-6 border-b pb-4 border-slate-200">
+                <div>
+                    <h2 class="text-xl font-bold text-emerald-900">Permainan 3: Cocokkan Pasangan</h2>
+                    <p class="text-xs text-slate-500">Buka kartu dan pasangkan nama Rukun Islam dengan maknanya!</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="bg-amber-100 text-amber-800 px-3 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-clock"></i> <span id="timer-g3">00:00</span>
+                    </div>
+                    <button onclick="exitGame()" class="text-slate-400 hover:text-rose-500 transition text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Match Grid -->
+            <div id="match-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
+                <!-- Cards generated via JS -->
+            </div>
+
+            <div class="flex justify-between items-center border-t pt-4 border-slate-200 text-xs text-slate-500">
+                <span>Percobaan: <strong id="match-attempts" class="text-slate-800">0</strong></span>
+                <button onclick="initGame3()" class="text-emerald-700 hover:text-emerald-900 font-semibold flex items-center gap-1">
+                    <i class="fa-solid fa-rotate-right"></i> Acak Ulang
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= 6. HASIL SKOR & SERTIFIKAT ================= -->
+        <section id="screen-result" class="w-full glass-panel rounded-3xl p-6 sm:p-10 shadow-2xl text-center hidden">
+            <!-- Badge Header -->
+            <div class="w-20 h-20 bg-amber-400 text-emerald-900 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-xl border-4 border-amber-200 animate-bounce">
+                <i id="result-icon" class="fa-solid fa-trophy"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold text-emerald-900 mb-1">Permainan Selesai!</h2>
+            <p id="result-subtitle" class="text-slate-600 text-sm mb-6">Selamat! Kamu telah menyelesaikan tantangan ini.</p>
+
+            <!-- Stars Rating -->
+            <div id="result-stars" class="flex justify-center gap-2 text-3xl text-amber-400 mb-6">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+            </div>
+
+            <!-- Score Cards Details -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 max-w-md mx-auto mb-8 shadow-inner">
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Skor Akhir</p>
+                        <p id="result-score" class="text-3xl font-extrabold text-emerald-700">100</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Waktu</p>
+                        <p id="result-time" class="text-3xl font-extrabold text-emerald-700">01:25</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Name Form for Certificate -->
+            <div class="max-w-md mx-auto mb-8 text-left bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <label for="player-name-input" class="block text-xs font-bold text-slate-700 mb-1">Nama Siswa / Sastrawan Muda:</label>
+                <input type="text" id="player-name-input" placeholder="Masukkan Nama Lengkapmu..." class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="showCertificate()" class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-certificate"></i> Lihat Sertifikat
+                </button>
+                <button onclick="showScreen('screen-main-menu')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-house"></i> Menu Utama
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= 7. SERTIFIKAT MODAL ================= -->
+        <div id="modal-certificate" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-10 shadow-2xl border-8 border-emerald-800 relative text-center overflow-y-auto max-h-[90vh]">
+                <!-- Close Button -->
+                <button onclick="closeCertificate()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <!-- Certificate Content Area -->
+                <div id="certificate-print-area" class="border-2 border-amber-400 p-6 sm:p-8 rounded-xl bg-amber-50/30">
+                    <div class="text-amber-600 text-4xl mb-2"><i class="fa-solid fa-award"></i></div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-emerald-900 tracking-wider font-sans uppercase">SERTIFIKAT KELULUSAN</h3>
+                    <p class="text-xs text-slate-500 tracking-widest uppercase mb-6">Pembelajaran Akidah Akhlak Kelas 7 SMP</p>
+
+                    <p class="text-sm text-slate-600 italic">Diberikan secara terhormat kepada:</p>
+                    <h4 id="cert-name" class="text-2xl sm:text-3xl font-extrabold text-emerald-800 my-3 underline decoration-amber-400 decoration-2">Siswa Cerdas</h4>
+
+                    <p class="text-xs sm:text-sm text-slate-700 max-w-lg mx-auto leading-relaxed mb-6">
+                        Telah berhasil menyelesaikan tantangan game edukasi <strong>"Penjelajah Rukun Islam"</strong> dengan pemahaman yang sangat baik tentang nilai-nilai dan ajaran Rukun Islam.
+                    </p>
+
+                    <div class="flex justify-around items-center max-w-md mx-auto my-6 border-y border-amber-200 py-3">
+                        <div>
+                            <span class="block text-xs text-slate-400 uppercase">Nilai Akidah</span>
+                            <span id="cert-score" class="text-xl font-bold text-emerald-700">100</span>
+                        </div>
+                        <div>
+                            <span class="block text-xs text-slate-400 uppercase">Predikat</span>
+                            <span id="cert-predicate" class="text-xl font-bold text-amber-600">Mumtaz (Sangat Baik)</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-end mt-8 text-xs text-slate-500">
+                        <div class="text-left">
+                            <p>Tanggal: <span id="cert-date">--/--/----</span></p>
+                            <p>Materi: Akidah Akhlak - Rukun Islam</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-1 flex items-center justify-center text-emerald-800 text-3xl font-arabic">
+                                ﷽
+                            </div>
+                            <p class="font-bold text-slate-700">Guru Akidah Akhlak</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Print Action -->
+                <div class="mt-6 flex justify-center gap-3">
+                    <button onclick="window.print()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-2.5 rounded-xl font-bold shadow transition flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+                    </button>
+                    <button onclick="closeCertificate()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-2.5 rounded-xl font-bold transition text-sm">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-emerald-950 text-emerald-400/80 text-xs py-4 text-center border-t border-emerald-800/50">
+        <p>© 2026 Media Pembelajaran Akidah Akhlak SMP Kelas 7 - Syariat & Akidah Islam</p>
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT GAME LOGIC ================= -->
+    <script>
+        /* ------------------------------------------------------------------
+           1. AUDIO SYNTHESIS (Web Audio API - Direct implementation)
+        ------------------------------------------------------------------ */
+        let audioCtx = null;
+        let isSoundOn = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (!isSoundOn) return;
+            initAudio();
+
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now); // A3
+                    osc.frequency.setValueAtTime(180, now + 0.15);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'win') {
+                    // Win Chime
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, i) => {
+                        const subOsc = audioCtx.createOscillator();
+                        const subGain = audioCtx.createGain();
+                        subOsc.connect(subGain);
+                        subGain.connect(audioCtx.destination);
+                        subOsc.frequency.setValueAtTime(freq, now + i * 0.1);
+                        subGain.gain.setValueAtTime(0.15, now + i * 0.1);
+                        subGain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
+                        subOsc.start(now + i * 0.1);
+                        subOsc.stop(now + i * 0.1 + 0.3);
+                    });
+                }
+            } catch(e) {
+                console.log("Audio not allowed yet");
+            }
+        }
+
+        function toggleSound() {
+            isSoundOn = !isSoundOn;
+            const icon = document.getElementById('sound-icon');
+            if (isSoundOn) {
+                icon.className = 'fa-solid fa-volume-high text-lg';
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-lg text-rose-300';
+            }
+        }
+
+
+        /* ------------------------------------------------------------------
+           2. GLOBAL NAVIGATION & TIMER SYSTEM
+        ------------------------------------------------------------------ */
+        let currentActiveGame = 0;
+        let gameTimerInterval = null;
+        let secondsElapsed = 0;
+
+        function showScreen(screenId) {
+            playSound('click');
+            // Hide all screens
+            const screens = ['screen-main-menu', 'screen-materi', 'game-1', 'game-2', 'game-3', 'screen-result'];
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            // Show selected
+            const target = document.getElementById(screenId);
+            if (target) target.classList.remove('hidden');
+
+            // Reset timer if exiting games
+            if (!screenId.startsWith('game-')) {
+                stopTimer();
+            }
+        }
+
+        function startTimer(timerElementId) {
+            stopTimer();
+            secondsElapsed = 0;
+            const timerEl = document.getElementById(timerElementId);
+            if (timerEl) timerEl.innerText = "00:00";
+
+            gameTimerInterval = setInterval(() => {
+                secondsElapsed++;
+                const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+                const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+                if (timerEl) timerEl.innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (gameTimerInterval) {
+                clearInterval(gameTimerInterval);
+                gameTimerInterval = null;
+            }
+        }
+
+        function exitGame() {
+            stopTimer();
+            showScreen('screen-main-menu');
+        }
+
+
+        /* ------------------------------------------------------------------
+           3. GAME 1: DRAG & DROP / URUTAN RUKUN ISLAM
+        ------------------------------------------------------------------ */
+        const rukunIslamItems = [
+            { id: 1, title: 'Mengucapkan Dua Kalimat Syahadat', detail: 'Rukun Ke-1: Persaksian tauhid dan kenabian' },
+            { id: 2, title: 'Mendirikan Shalat 5 Waktu', detail: 'Rukun Ke-2: Tiang agama Islam' },
+            { id: 3, title: 'Menunaikan Zakat', detail: 'Rukun Ke-3: Membersihkan harta dan jiwa' },
+            { id: 4, title: 'Menjalankan Puasa Ramadan', detail: 'Rukun Ke-4: Melatih hawa nafsu dan taqwa' },
+            { id: 5, title: 'Menaiki Ibadah Haji', detail: 'Rukun Ke-5: Bagi yang mampu ke Baitullah' }
+        ];
+
+        let g1UserSelections = [null, null, null, null, null]; // Stores selected item objects
+
+        function startGame1() {
+            currentActiveGame = 1;
+            showScreen('game-1');
+            startTimer('timer-g1');
+            resetGame1();
+        }
+
+        function resetGame1() {
+            g1UserSelections = [null, null, null, null, null];
+            updateGame1UI();
+
+            // Shuffle pool items
+            const shuffled = [...rukunIslamItems].sort(() => Math.random() - 0.5);
+            const poolContainer = document.getElementById('g1-options-container');
+            poolContainer.innerHTML = '';
+
+            shuffled.forEach(item => {
+                const btn = document.createElement('div');
+                btn.id = `g1-item-${item.id}`;
+                btn.className = "p-3 bg-white border border-slate-200 hover:border-emerald-500 rounded-xl shadow-sm cursor-pointer transition flex items-center justify-between group";
+                btn.onclick = () => selectItemForSlot(item);
+                btn.innerHTML = `
+                    <div>
+                        <p class="font-bold text-slate-800 text-sm">${item.title}</p>
+                        <p class="text-xs text-slate-400">${item.detail}</p>
+                    </div>
+                    <i class="fa-solid fa-plus text-emerald-600 group-hover:scale-125 transition"></i>
+                `;
+                poolContainer.appendChild(btn);
+            });
+        }
+
+        function selectItemForSlot(item) {
+            playSound('click');
+            // Find first empty slot
+            const emptyIdx = g1UserSelections.findIndex(slot => slot === null);
+            if (emptyIdx === -1) return; // All slots filled
+
+            g1UserSelections[emptyIdx] = item;
+            
+            // Hide from pool
+            const poolItem = document.getElementById(`g1-item-${item.id}`);
+            if (poolItem) poolItem.classList.add('hidden');
+
+            updateGame1UI();
+        }
+
+        function clearSlot(slotNumber) {
+            playSound('click');
+            const idx = slotNumber - 1;
+            const item = g1UserSelections[idx];
+            if (!item) return;
+
+            // Show back in pool
+            const poolItem = document.getElementById(`g1-item-${item.id}`);
+            if (poolItem) poolItem.classList.remove('hidden');
+
+            g1UserSelections[idx] = null;
+            updateGame1UI();
+        }
+
+        function updateGame1UI() {
+            const slots = document.querySelectorAll('.target-slot');
+            slots.forEach((slot, index) => {
+                const item = g1UserSelections[index];
+                const contentEl = slot.querySelector('.slot-content');
+                const clearBtn = slot.querySelector('.clear-btn');
+
+                if (item) {
+                    contentEl.innerHTML = `<span class="font-bold text-emerald-900">${item.title}</span>`;
+                    slot.classList.remove('bg-slate-100', 'border-dashed');
+                    slot.classList.add('bg-emerald-50', 'border-emerald-400', 'border-solid');
+                    clearBtn.classList.remove('hidden');
+                } else {
+                    contentEl.innerHTML = `<span class="text-slate-400">Klik pilihan untuk mengisi #${index + 1}</span>`;
+                    slot.classList.add('bg-slate-100', 'border-dashed');
+                    slot.classList.remove('bg-emerald-50', 'border-emerald-400', 'border-solid');
+                    clearBtn.classList.add('hidden');
+                }
+            });
+        }
+
+        function checkGame1() {
+            // Check if all filled
+            if (g1UserSelections.includes(null)) {
+                alert('Silakan isi kelima urutan Rukun Islam terlebih dahulu!');
+                return;
+            }
+
+            let correctCount = 0;
+            g1UserSelections.forEach((item, index) => {
+                if (item.id === index + 1) {
+                    correctCount++;
+                }
+            });
+
+            const score = correctCount * 20; // Max 100
+            finishGame(score);
+        }
+
+
+        /* ------------------------------------------------------------------
+           4. GAME 2: KUIS PILIHAN GANDA (AKIDAH AKHLAK KELAS 7)
+        ------------------------------------------------------------------ */
+        const quizQuestions = [
+            {
+                q: "Kalimat Syahadatain terdiri dari dua persaksian, yaitu Syahadat Tauhid dan Syahadat...",
+                options: ["Rasul", "Malaikat", "Kitab", "Takdir"],
+                answer: 0,
+                explain: "Syahadatain mencakup Syahadat Tauhid (Keesaan Allah) dan Syahadat Rasul (Kerasulan Nabi Muhammad SAW)."
+            },
+            {
+                q: "Ibadah yang dijuluki sebagai 'Tiang Agama' (As-Shalatu 'Imaduddin) dalam Islam adalah...",
+                options: ["Zakat", "Shalat 5 Waktu", "Puasa Ramadan", "Haji"],
+                answer: 1,
+                explain: "Shalat adalah tiang agama. Barangsiapa mendirikannya berarti mendirikan agama, dan barangsiapa meninggalkannya berarti meruntuhkan agama."
+            },
+            {
+                q: "Hukum menunaikan Shalat Fardhu 5 waktu bagi setiap Muslim yang baligh dan berakal adalah...",
+                options: ["Sunnah Muakkad", "Fardhu 'Ain", "Fardhu Kifayah", "Mubah"],
+                answer: 1,
+                explain: "Fardhu 'Ain artinya kewajiban individu secara pribadi yang tidak boleh diwakilkan oleh orang lain."
+            },
+            {
+                q: "Zakat yang wajib dikeluarkan setiap jiwa umat Islam pada bulan Ramadan sampai sebelum shalat Idul Fitri dinamakan...",
+                options: ["Zakat Maal", "Zakat Fitrah", "Infaq", "Sedekah"],
+                answer: 1,
+                explain: "Zakat Fitrah bertujuan membersihkan diri dan memberi makan fakir miskin menjelang Idul Fitri (2,5 kg / 3,5 liter beras)."
+            },
+            {
+                q: "Batas minimal jumlah harta yang menyebabkan harta tersebut wajib dikeluarkan zakatnya disebut...",
+                options: ["Haul", "Nishab", "Riba", "Kaffarah"],
+                answer: 1,
+                explain: "Nishab adalah batas minimal kepemilikan harta, sedangkan Haul adalah jangka waktu kepemilikan selama 1 tahun."
+            },
+            {
+                q: "Tujuan utama diperintahkannya ibadah Puasa di bulan Ramadan sebagaimana tercantum dalam QS. Al-Baqarah ayat 183 adalah...",
+                options: ["Merasakan lapar saja", "Supaya kaya", "Agar menjadi pribadi yang bertaqwa", "Mendapat pujian teman"],
+                answer: 2,
+                explain: "Firman Allah SWT: 'La'allakum tattaquun' (agar kamu bertaqwa)."
+            },
+            {
+                q: "Salah satu amalan berikut yang membatalkan puasa adalah...",
+                options: ["Mandi di siang hari", "Makan atau minum dengan sengaja", "Tidur siang", "Menggosok gigi tanpa tertelan"],
+                answer: 1,
+                explain: "Makan, minum, atau memasukkan benda ke lubang tubuh secara sengaja membatalkan puasa."
+            },
+            {
+                q: "Ibadah Haji merupakan Rukun Islam ke-5 yang wajib dilaksanakan dengan syarat...",
+                options: ["Mampu (Istitha'ah)", "Setiap tahun", "Bagi yang berada di Makkah saja", "Minimal usia 50 tahun"],
+                answer: 0,
+                explain: "Haji wajib bagi yang Istitha'ah (mampu secara fisik, kesehatan, finansial, dan keamanan perjalanan)."
+            },
+            {
+                q: "Melakukan perjalanan mengelilingi Ka'bah sebanyak 7 kali putaran saat ibadah Haji dinamakan...",
+                options: ["Sa'i", "Wukuf", "Thawaf", "Tahallul"],
+                answer: 2,
+                explain: "Thawaf adalah mengelilingi Ka'bah 7 kali berlawanan arah jarum jam. Sedangkan Sa'i berlari kecil antara Shafa dan Marwah."
+            },
+            {
+                q: "Mengingkari atau tidak percaya kepada salah satu dari Rukun Islam dapat menyebabkan seseorang menjadi...",
+                options: ["Fasiq", "Murtad / Keluar dari Islam", "Munafik", "Saleh"],
+                answer: 1,
+                explain: "Rukun Islam adalah pilar utama keislaman. Mengingkari salah satu rukunnya berarti meruntuhkan fondasi iman."
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        function startGame2() {
+            currentActiveGame = 2;
+            showScreen('game-2');
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-score').innerText = '0';
+            startTimer('timer-g1'); // share timer logic
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            const qData = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-progress-text').innerText = `Pertanyaan ${currentQuizIndex + 1} dari ${quizQuestions.length}`;
+            document.getElementById('quiz-question').innerText = qData.q;
+
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = '';
+
+            // Hide feedback & next btn
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            qData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "quiz-opt-btn w-full text-left p-4 bg-white border-2 border-slate-200 hover:border-emerald-500 rounded-xl transition text-slate-700 font-medium text-sm flex items-center justify-between group";
+                btn.onclick = () => checkQuizAnswer(idx);
+                btn.innerHTML = `
+                    <span>${String.fromCharCode(65 + idx)}. ${opt}</span>
+                    <i class="fa-regular fa-circle text-slate-300 group-hover:text-emerald-500"></i>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selectedIdx) {
+            const qData = quizQuestions[currentQuizIndex];
+            const optButtons = document.querySelectorAll('.quiz-opt-btn');
+
+            // Disable all buttons
+            optButtons.forEach(btn => btn.disabled = true);
+
+            const feedbackBox = document.getElementById('quiz-feedback');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+
+            if (selectedIdx === qData.answer) {
+                playSound('correct');
+                quizScore += 10;
+                document.getElementById('quiz-score').innerText = quizScore;
+
+                optButtons[selectedIdx].classList.remove('border-slate-200');
+                optButtons[selectedIdx].classList.add('border-emerald-500', 'bg-emerald-100', 'text-emerald-900');
+
+                feedbackBox.className = "p-4 rounded-xl mb-6 border transition-all text-sm bg-emerald-50 border-emerald-300 text-emerald-900";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> Jawaban Benar!`;
+            } else {
+                playSound('wrong');
+                optButtons[selectedIdx].classList.remove('border-slate-200');
+                optButtons[selectedIdx].classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+
+                // Highlight correct
+                optButtons[qData.answer].classList.remove('border-slate-200');
+                optButtons[qData.answer].classList.add('border-emerald-500', 'bg-emerald-50');
+
+                feedbackBox.className = "p-4 rounded-xl mb-6 border transition-all text-sm bg-rose-50 border-rose-300 text-rose-900";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600"></i> Jawaban Kurang Tepat`;
+            }
+
+            feedbackText.innerText = qData.explain;
+            feedbackBox.classList.remove('hidden');
+
+            // Show Next Button
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            playSound('click');
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                loadQuizQuestion();
+            } else {
+                finishGame(quizScore);
+            }
+        }
+
+
+        /* ------------------------------------------------------------------
+           5. GAME 3: COCOKKAN PASANGAN (MATCH CARD)
+        ------------------------------------------------------------------ */
+        const matchPairsData = [
+            { text: "Syahadat", pairId: 1, icon: "fa-certificate" },
+            { text: "Persaksian tiada Tuhan selain Allah & Nabi Muhammad utusan Allah", pairId: 1, icon: "fa-quote-left" },
+            
+            { text: "Shalat", pairId: 2, icon: "fa-mosque" },
+            { text: "Ibadah wajib 5 waktu yang menjadi tiang agama Islam", pairId: 2, icon: "fa-clock" },
+
+            { text: "Zakat", pairId: 3, icon: "fa-hand-holding-dollar" },
+            { text: "Mengeluarkan sebagian harta untuk 8 golongan berhak", pairId: 3, icon: "fa-coins" },
+
+            { text: "Puasa", pairId: 4, icon: "fa-moon" },
+            { text: "Menahan diri dari makan, minum & hal batil dari Subuh ke Maghrib", pairId: 4, icon: "fa-utensils-slash" }
+        ];
+
+        let flippedCards = [];
+        let matchedPairsCount = 0;
+        let matchAttempts = 0;
+
+        function startGame3() {
+            currentActiveGame = 3;
+            showScreen('game-3');
+            startTimer('timer-g3');
+            initGame3();
+        }
+
+        function initGame3() {
+            flippedCards = [];
+            matchedPairsCount = 0;
+            matchAttempts = 0;
+            document.getElementById('match-attempts').innerText = '0';
+
+            const shuffled = [...matchPairsData].sort(() => Math.random() - 0.5);
+            const grid = document.getElementById('match-grid');
+            grid.innerHTML = '';
+
+            shuffled.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "card-flip h-28 cursor-pointer";
+                card.dataset.pairId = item.pairId;
+                card.dataset.index = index;
+
+                card.innerHTML = `
+                    <div class="card-inner relative w-full h-full rounded-xl shadow-md transition-transform duration-500">
+                        <!-- Front Face (Hidden) -->
+                        <div class="card-front absolute inset-0 bg-gradient-to-br from-emerald-600 to-emerald-800 text-white rounded-xl flex flex-col items-center justify-center p-2 border-2 border-emerald-400">
+                            <i class="fa-solid fa-star text-amber-300 text-xl mb-1"></i>
+                            <span class="text-xs font-bold tracking-widest uppercase">Rukun Islam</span>
+                        </div>
+                        <!-- Back Face (Content) -->
+                        <div class="card-back absolute inset-0 bg-white text-slate-800 rounded-xl p-3 flex flex-col items-center justify-center text-center border-2 border-emerald-500 shadow-lg">
+                            <i class="fa-solid ${item.icon} text-emerald-600 text-lg mb-1"></i>
+                            <p class="text-xs font-semibold leading-tight">${item.text}</p>
+                        </div>
+                    </div>
+                `;
+
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) {
+                return;
+            }
+
+            playSound('click');
+            card.classList.add('flipped');
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                matchAttempts++;
+                document.getElementById('match-attempts').innerText = matchAttempts;
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [c1, c2] = flippedCards;
+            const isMatch = c1.dataset.pairId === c2.dataset.pairId;
+
+            if (isMatch) {
+                playSound('correct');
+                c1.classList.add('matched');
+                c2.classList.add('matched');
+                
+                // Add green highlight glow
+                c1.querySelector('.card-back').classList.add('bg-emerald-100', 'border-emerald-600');
+                c2.querySelector('.card-back').classList.add('bg-emerald-100', 'border-emerald-600');
+
+                flippedCards = [];
+                matchedPairsCount++;
+
+                if (matchedPairsCount === 4) { // All 4 pairs matched
+                    setTimeout(() => {
+                        // Calculate score based on attempts
+                        let score = 100 - ((matchAttempts - 4) * 10);
+                        if (score < 50) score = 50;
+                        finishGame(score);
+                    }, 800);
+                }
+            } else {
+                playSound('wrong');
+                setTimeout(() => {
+                    c1.classList.remove('flipped');
+                    c2.classList.remove('flipped');
+                    flippedCards = [];
+                }, 1000);
+            }
+        }
+
+
+        /* ------------------------------------------------------------------
+           6. RESULT & CERTIFICATE GENERATION
+        ------------------------------------------------------------------ */
+        let finalScore = 0;
+
+        function finishGame(score) {
+            stopTimer();
+            finalScore = score;
+            playSound('win');
+
+            // Trigger Confetti
+            if (window.confetti) {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+
+            // Set Result UI
+            document.getElementById('result-score').innerText = finalScore;
+            
+            const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+            const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+            document.getElementById('result-time').innerText = `${mins}:${secs}`;
+
+            // Stars calculation
+            const starsContainer = document.getElementById('result-stars');
+            if (finalScore >= 80) {
+                starsContainer.innerHTML = '<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>';
+                document.getElementById('result-subtitle').innerText = "Luar biasa! Pemahaman Rukun Islam-mu sangat sempurna!";
+            } else if (finalScore >= 60) {
+                starsContainer.innerHTML = '<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>';
+                document.getElementById('result-subtitle').innerText = "Bagus sekali! Teruskan belajar untuk hasil lebih baik!";
+            } else {
+                starsContainer.innerHTML = '<i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>';
+                document.getElementById('result-subtitle').innerText = "Tetap semangat! Yuk baca rangkuman materi dan coba lagi!";
+            }
+
+            showScreen('screen-result');
+        }
+
+        function showCertificate() {
+            playSound('click');
+            const nameInput = document.getElementById('player-name-input').value.trim();
+            const playerName = nameInput !== "" ? nameInput : "Siswa Cerdas SMP";
+
+            document.getElementById('cert-name').innerText = playerName;
+            document.getElementById('cert-score').innerText = finalScore;
+
+            // Predicate
+            let pred = "Mumtaz (Sangat Baik)";
+            if (finalScore < 80 && finalScore >= 60) pred = "Jayyid (Baik)";
+            if (finalScore < 60) pred = "Maqbul (Cukup)";
+            document.getElementById('cert-predicate').innerText = pred;
+
+            // Date
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('cert-date').innerText = dateStr;
+
+            document.getElementById('modal-certificate').classList.remove('hidden');
+        }
+
+        function closeCertificate() {
+            playSound('click');
+            document.getElementById('modal-certificate').classList.add('hidden');
+        }
+
+        function startGame(gameNumber) {
+            if (gameNumber === 1) startGame1();
+            if (gameNumber === 2) startGame2();
+            if (gameNumber === 3) startGame3();
+        }
+
+        // Initialize Audio Context on first click anywhere
+        window.addEventListener('click', () => {
+            initAudio();
+        }, { once: true });
+    </script>
+</body>
+</html>
